@@ -1,41 +1,47 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useFirebase } from '../../components/Firebase'
-import Container from '../../components/Container'
-import Header from '../../components/Header'
-import Icon from '../../components/Icon'
-import PageTitle from '../../components/PageTitle'
-import Card, { FullWidthForm } from '../../components/Card'
-import Button from '../../components/Button'
-import Form, { Input, Label } from '../../components/Form'
+import { useFirebase } from '~/components/Firebase'
+import Container from '~/components/Container'
+import Header from '~/components/Header'
+import Icon from '~/components/Icon'
+import PageTitle from '~/components/PageTitle'
+import Card, { FullWidthForm } from '~/components/Card'
+import Button from '~/components/Button'
+import Form, { Input, Label } from '~/components/Form'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import {
+  borderColor,
+  buttonDisabledColor,
+  panelTextColor,
+  space
+} from '~/styles/variables'
 
 const Options = styled.div`
   display: grid;
-  grid-gap: 4px;
+  grid-gap: ${space[4]};
   grid-template-columns: auto auto;
 `
 
 const Divider = styled.hr`
-  margin: 8px 0;
-  border: 1px solid #eaeaea;
+  margin: ${space[8]} 0;
+  border: 1px solid ${borderColor};
 `
 
 const LinkIcon = styled(Icon)`
-  fill: #000;
-  margin-right: 4px;
+  fill: ${panelTextColor};
+  margin-right: ${space[4]};
 `
 
 const SmallButton = styled(Button)`
   display: inline-block;
-  padding: 4px 8px 3px;
+  padding: ${space[4]} ${space[8]} 3px;
   width: auto
 `
 
 const CardTitle = styled.div`
   ${(props) => props.done && css`
-    color: #858585;
+    color: ${buttonDisabledColor};
     text-decoration: line-through;
   `}
 `

@@ -1,12 +1,12 @@
 import React from 'react'
-import { useFirebase } from '../components/Firebase'
+import { useFirebase } from '~/components/Firebase'
 import Link from 'next/link'
-import Header from '../components/Header'
-import Container from '../components/Container'
-import PageTitle from '../components/PageTitle'
-import Card from '../components/Card'
-import Button from '../components/Button'
-import Form from '../components/Form'
+import Header from '~/components/Header'
+import Container from '~/components/Container'
+import PageTitle from '~/components/PageTitle'
+import Card from '~/components/Card'
+import Button from '~/components/Button'
+import Form from '~/components/Form'
 
 export default function Home() {
   const { user, lists } = useFirebase()

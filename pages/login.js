@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useFirebase } from '../components/Firebase'
+import { useFirebase } from '~/components/Firebase'
 import { useRouter } from 'next/router'
-import Container from '../components/Container'
-import Header from '../components/Header'
-import PageTitle from '../components/PageTitle'
-import Button from '../components/Button'
-import Form, { Input, Label } from '../components/Form'
+import Container from '~/components/Container'
+import Header from '~/components/Header'
+import PageTitle from '~/components/PageTitle'
+import Button from '~/components/Button'
+import Form, { Input, Label } from '~/components/Form'
 
 const Login = () => {
   const [email, setEmail] = useState('')

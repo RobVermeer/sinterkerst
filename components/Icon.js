@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import { iconColor, iconSize } from '~/styles/variables'
 
 const Wrapper = styled.svg`
-  width: 12px;
-  height: 12px;
-  fill: #fff;
+  width: ${iconSize};
+  height: ${iconSize};
+  fill: ${iconColor};
 `
 
 const Icon = ({ type, ...props }) => {

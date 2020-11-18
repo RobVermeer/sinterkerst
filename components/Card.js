@@ -1,28 +1,37 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {
+  borderColor,
+  borderRadius,
+  panelColor,
+  panelHoverColor,
+  panelTextColor,
+  space,
+  transition,
+} from '~/styles/variables'
 
 const Card = styled.div`
-  color: #1d1d1d;
+  color: ${panelTextColor};
   text-shadow: none;
   display: grid;
-  grid-gap: 0 16px;
+  grid-gap: 0 ${space[16]};
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
   grid-template-areas: "title nav" "form form";
-  padding: 8px 16px;
+  padding: ${space[8]} ${space[16]};
   text-decoration: none;
-  background-color: #f9f9f9;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  background-color: ${panelColor};
+  border: 1px solid ${borderColor};
+  border-radius: ${borderRadius};
   align-items: center;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: all ${transition};
   
   & + & {
-    margin-top: 8px;
+    margin-top: ${space[8]};
   }
   
   a&:hover {
-    background-color: #eeeeee;
+    background-color: ${panelHoverColor};
   }
 `
 

@@ -1,29 +1,37 @@
 import React from 'react'
 import styled from '@emotion/styled'
+import {
+  bodyTextColor,
+  buttonColor,
+  buttonDisabledColor,
+  buttonHoverColor,
+  space,
+  transition,
+} from '~/styles/variables'
 
 const Button = styled.button`
   display: block;
   width: 100%;
-  background-color: #ff7f2c;
-  color: #fff;
-  padding: 8px 16px;
-  border: 1px solid #ff7f2c;
+  background-color: ${buttonColor};
+  color: ${bodyTextColor};
+  padding: ${space[8]} ${space[16]};
+  border: 1px solid ${buttonColor};
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: all ${transition};
   
   :focus,
   :active,
   :hover {
     outline: none;
-    background-color: #ffa739;
-    border-color: #ff7f2c;
+    background-color: ${buttonHoverColor};
+    border-color: ${buttonColor};
   }
   
   :disabled {
-    background-color: #969696;
-    border-color: #969696;
+    background-color: ${buttonDisabledColor};
+    border-color: ${buttonDisabledColor};
     cursor: not-allowed;
   }
 `

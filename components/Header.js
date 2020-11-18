@@ -1,29 +1,22 @@
 import Link from 'next/link'
 import React from 'react'
-import { useFirebase } from './Firebase'
+import { useFirebase } from '~/components/Firebase'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
-import Button from './Button'
+import Button from '~/components/Button'
+import {space} from '~/styles/variables'
 
 const Wrapper = styled.header`
-  padding: 32px 0 16px;
+  padding: ${space[32]} 0 ${space[16]};
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
 `
 
-const Title = styled.h1`
-  margin: 0;
-`
-
-const UserInfo = styled.h6`
-  margin: 0;
-`
-
 const Logout = styled(Button)`
   display: inline-block;
-  padding: 4px 8px;
-  margin-left: 4px;
+  padding: ${space[4]} ${space[8]};
+  margin-left: ${space[4]};
   width: auto
 `
 
@@ -38,13 +31,13 @@ const Header = () => {
 
   return (
     <Wrapper>
-      <Title><Link href="/"><a>SinterKerst</a></Link></Title>
+      <h1><Link href="/"><a>SinterKerst</a></Link></h1>
 
       {user && (
-        <UserInfo>
+        <h6>
           Ingelogd als {user.displayName.substring(2)}{' '}
           <Logout onClick={logout}>uitloggen</Logout>
-        </UserInfo>
+        </h6>
       )}
     </Wrapper>
   )
