@@ -5,27 +5,22 @@ import Container from '~/components/Container'
 import Header from '~/components/Header'
 import Icon from '~/components/Icon'
 import PageTitle from '~/components/PageTitle'
-import Card, { FullWidthForm } from '~/components/Card'
+import Card from '~/components/Card'
 import Button from '~/components/Button'
-import Form, { Input, Label } from '~/components/Form'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import {
-  borderColor,
   buttonDisabledColor,
   panelTextColor,
   space
 } from '~/styles/variables'
+import NewItemForm from '~/components/NewItemForm'
+import EditItemForm from '~/components/EditItemForm'
 
 const Options = styled.div`
   display: grid;
   grid-gap: ${space[4]};
   grid-template-columns: auto auto;
-`
-
-const Divider = styled.hr`
-  margin: ${space[8]} 0;
-  border: 1px solid ${borderColor};
 `
 
 const LinkIcon = styled(Icon)`
@@ -50,12 +45,7 @@ const Name = () => {
   const router = useRouter()
   const { name } = router.query
   const { user, lists, firebase } = useFirebase()
-  const [newItem, setNewItem] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [edit, setEdit] = useState('')
-  const [editTitle, setEditTitle] = useState('')
-  const [editUrl, setEditUrl] = useState('')
-  const [editBought, setEditBought] = useState(false)
   const list = lists[name]
   const listUserName = name && name.substring(2)
   const currentUserName = user && user.displayName.substring(2)
@@ -71,13 +61,6 @@ const Name = () => {
     await firebase.changeListItemStatus(name, key, item)
   }
 
-  const addItem = async (event) => {
-    event.preventDefault()
-    await firebase.addToList(name, newItem, newUrl)
-    setNewItem('')
-    setNewUrl('')
-  }
-
   const remove = async (event, index) => {
     event.preventDefault()
 
@@ -88,21 +71,12 @@ const Name = () => {
     await firebase.removeFromList(name, index)
   }
 
-  const openEdit = (event, key, { title, url, bought }) => {
+  const openEdit = (event, key) => {
     event.preventDefault()
 
     if (edit) return setEdit('')
 
     setEdit(key)
-    setEditTitle(title)
-    setEditUrl(url)
-    setEditBought(bought)
-  }
-
-  const editItem = async (event) => {
-    event.preventDefault()
-    await firebase.editListItem(name, edit, editTitle, editUrl, editBought)
-    setEdit('')
   }
 
   if (!list) return null
@@ -150,17 +124,7 @@ const Name = () => {
             )}
 
             {edit === key && (
-              <FullWidthForm onSubmit={editItem}>
-                <Divider />
-                <Label>Wens:</Label>
-                <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
-                <Label>Link:</Label>
-                <Input value={editUrl} onChange={(e) => setEditUrl(e.target.value)} />
-                <Options>
-                  <Button onClick={editItem} disabled={!editTitle}>Wijzigen</Button>
-                  <Button onClick={() => setEdit('')} disabled={!editTitle}>Annuleren</Button>
-                </Options>
-              </FullWidthForm>
+              <EditItemForm name={name} id={edit} title={title} url={url} bought={bought} cancelEdit={() => setEdit('')} />
             )}
           </Card>
         )
@@ -170,15 +134,7 @@ const Name = () => {
         <Card as="p">{listUserName} heeft nog niks op het lijstje gezet!</Card>
       )}
 
-      {isOwnList && (
-        <Form onSubmit={addItem}>
-          <Label>Voeg nieuwe wens toe:</Label>
-          <Input value={newItem} onChange={(e) => setNewItem(e.target.value)} />
-          <Label>Voeg link toe:</Label>
-          <Input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} />
-          <Button onClick={addItem} disabled={!newItem}>Toevoegen</Button>
-        </Form>
-      )}
+      {isOwnList && <NewItemForm name={name} />}
     </Container>
   )
 }

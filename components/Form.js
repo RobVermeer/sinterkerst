@@ -9,14 +9,16 @@ import {
   space,
   shadowColor,
   transition,
+  errorBackgroundColor,
+  bodyTextColor,
 } from '~/styles/variables'
 
-export const Label = styled.label`
+export const StyledLabel = styled.label`
   display: block;
   margin-bottom: ${space[8]};
 `
 
-export const Input = styled.input`
+const StyledInput = styled.input`
   display: block;
   width: 100%;
   margin-bottom: ${space[16]};
@@ -30,6 +32,32 @@ export const Input = styled.input`
     outline: none;
   }
 `
+
+const Error = styled.div`
+  background-color: ${errorBackgroundColor};
+  border-radius: ${borderRadius};
+  padding: ${space[8]};
+  color: ${bodyTextColor};
+  margin-top: -${space[8]};
+  margin-bottom: ${space[16]};
+`
+
+export const Input = ({ children, as, label, name, type, handleChange, handleBlur, values, touched, errors }) => {
+  const value = values[name]
+  const dirty = touched[name]
+  const error = errors[name]
+
+  return (
+    <>
+      <StyledLabel htmlFor={name}>{label}</StyledLabel>
+      <StyledInput as={as} id={name} name={name} type={type} value={value} onChange={handleChange} onBlur={handleBlur} children={children} />
+
+      {Boolean(dirty && error) && (
+        <Error className="error">{error}</Error>
+      )}
+    </>
+  )
+}
 
 const Form = styled.form`
   margin-top: ${space[16]};

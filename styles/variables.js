@@ -8,6 +8,7 @@ export const panelTextColor = '#000'
 export const buttonColor = '#ff7f2c'
 export const buttonHoverColor = '#ffa739'
 export const buttonDisabledColor = '#969696'
+export const errorBackgroundColor = '#ea3c3a'
 export const space = {
   2: '2px',
   4: '4px',

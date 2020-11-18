@@ -33,7 +33,7 @@ const Header = () => {
     <Wrapper>
       <h1><Link href="/"><a>SinterKerst</a></Link></h1>
 
-      {user && (
+      {user && user.displayName && (
         <h6>
           Ingelogd als {user.displayName.substring(2)}{' '}
           <Logout onClick={logout}>uitloggen</Logout>
