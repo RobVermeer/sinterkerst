@@ -78,7 +78,9 @@ const Name = () => {
     setNewUrl('')
   }
 
-  const remove = async (index) => {
+  const remove = async (event, index) => {
+    event.preventDefault()
+
     const really = confirm(`${currentUserName}, weet je zeker dat je dit cadeau van je lijstje wilt verwijderen?`)
 
     if (!really) return
@@ -86,7 +88,9 @@ const Name = () => {
     await firebase.removeFromList(name, index)
   }
 
-  const openEdit = (key, { title, url, bought }) => {
+  const openEdit = (event, key, { title, url, bought }) => {
+    event.preventDefault()
+
     if (edit) return setEdit('')
 
     setEdit(key)
@@ -114,14 +118,20 @@ const Name = () => {
 
         if (!Boolean(title)) return null
 
+        const cardProps = { key }
+
+        if (!edit && url) {
+          cardProps['as'] = 'a'
+          cardProps['href'] = url
+          cardProps['target'] = '_blank'
+          cardProps['rel'] = 'noopener noreferrer'
+        }
+
         return (
-          <Card key={key}>
+          <Card {...cardProps}>
             <CardTitle done={bought && !isOwnList}>
-              {Boolean(url) ? (
-                <a href={url} target="_blank" rel="noopener noreferrer"><LinkIcon type="link" />{title}</a>
-              ) : (
-                <>{title}</>
-              )}
+              {Boolean(url) && <LinkIcon type="link" />}
+              {title}
             </CardTitle>
 
             {!isOwnList && (
@@ -130,10 +140,10 @@ const Name = () => {
 
             {isOwnList && (
               <Options>
-                <SmallButton onClick={() => openEdit(key, list[key])}>
+                <SmallButton onClick={(event) => openEdit(event, key, list[key])}>
                   <Icon type="edit" />
                 </SmallButton>
-                <SmallButton onClick={() => remove(key)}>
+                <SmallButton onClick={(event) => remove(event, key)}>
                   <Icon type="trash" />
                 </SmallButton>
               </Options>
