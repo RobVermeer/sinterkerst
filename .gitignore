@@ -32,3 +32,4 @@ yarn-error.log*
 
 # vercel
 .vercel
+/sint-2d7f8-firebase-adminsdk-2ei5q-ef1a477203.json

@@ -12,8 +12,12 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "firebase": "^8.0.1",
+    "firebase-admin": "^9.4.1",
+    "firebase-functions": "^3.11.0",
     "formik": "^2.2.5",
+    "js-cookie": "^2.2.1",
     "next": "10.0.1",
+    "nodemailer": "^6.4.16",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "yup": "^0.29.3"

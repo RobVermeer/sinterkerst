@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useFirebase } from '~/components/Firebase'
 import Container from '~/components/Container'
@@ -16,6 +16,7 @@ import {
 } from '~/styles/variables'
 import NewItemForm from '~/components/NewItemForm'
 import EditItemForm from '~/components/EditItemForm'
+import Cookies from 'js-cookie'
 
 const Options = styled.div`
   display: grid;
@@ -46,10 +47,16 @@ const Name = () => {
   const { name } = router.query
   const { user, lists, firebase } = useFirebase()
   const [edit, setEdit] = useState('')
+  const [reminderSent, setReminderSent] = useState(false)
+  const [loading, setLoading] = useState(false)
   const list = lists[name]
   const listUserName = name && name.substring(2)
   const currentUserName = user && user.displayName.substring(2)
   const isOwnList = currentUserName === listUserName
+
+  useEffect(() => {
+    setReminderSent(Cookies.get(`reminder-${name}`) === '1')
+  }, [name])
 
   const changeStatus = async (item, key) => {
     if (item.bought) {
@@ -77,6 +84,25 @@ const Name = () => {
     if (edit) return setEdit('')
 
     setEdit(key)
+  }
+
+  const sendReminder = async (event) => {
+    event.preventDefault()
+    setLoading(true)
+
+    try {
+      await fetch('/api/sendReminder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+        })
+      });
+      Cookies.set(`reminder-${name}`, 1, { expires: 1 })
+      setReminderSent(true)
+    } catch { }
   }
 
   if (!list) return null
@@ -131,7 +157,10 @@ const Name = () => {
       })}
 
       {Object.keys(list).length === 1 && (
-        <Card as="p">{listUserName} heeft nog niks op het lijstje gezet!</Card>
+        <Card as="p">
+          {listUserName} heeft nog niks op het lijstje gezet!{' '}
+          {!reminderSent && <Button onClick={sendReminder} disabled={loading}>Stuur een herinnering</Button>}
+        </Card>
       )}
 
       {isOwnList && <NewItemForm name={name} />}
