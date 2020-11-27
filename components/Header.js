@@ -23,6 +23,7 @@ const Logout = styled(Button)`
 const Header = () => {
   const { user, firebase } = useFirebase()
   const router = useRouter()
+  const name = user?.displayName || user?.name
 
   const logout = async() => {
     await firebase.signOut()
@@ -33,9 +34,9 @@ const Header = () => {
     <Wrapper>
       <h1><Link href="/"><a>SinterKerst</a></Link></h1>
 
-      {user && user.displayName && (
+      {Boolean(name) && (
         <h6>
-          Ingelogd als {user.displayName.substring(2)}{' '}
+          Ingelogd als {name.substring(2)}{' '}
           <Logout onClick={logout}>uitloggen</Logout>
         </h6>
       )}

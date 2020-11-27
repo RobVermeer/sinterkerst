@@ -3,15 +3,26 @@ import Firebase, { FirebaseContext } from '~/components/Firebase'
 import Head from 'next/head'
 import { Global } from '@emotion/react'
 import globalStyles from '~/styles/global'
+import nookies from 'nookies'
 
 const firebase = new Firebase()
 
 const MyApp = ({ Component, pageProps }) => {
-  const [user, setUser] = useState(null)
-  const [lists, setLists] = useState([])
+  const { user: initialUser = null, lists: initialLists = [] } = pageProps
+  const [user, setUser] = useState(initialUser)
+  const [lists, setLists] = useState(initialLists)
   const data = useMemo(() => ({ user, lists, firebase }), [user, lists, firebase])
   const memoizedAuthChange = useCallback(
-    () => firebase.onAuthChange(setUser),
+    () => firebase.onIdTokenChanged(async (u) => {
+      setUser(u)
+
+      if (!u) {
+        nookies.set(undefined, 'token', '')
+      } else {
+        const token = await u.getIdToken()
+        nookies.set(undefined, 'token', token)
+      }
+    }),
     [firebase],
   )
   const memoizedListChange = useCallback(

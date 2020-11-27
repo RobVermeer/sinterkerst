@@ -23,7 +23,7 @@ class Firebase {
     this.database = app.database()
   }
 
-  onAuthChange = (callback) => this.auth.onAuthStateChanged(callback)
+  onIdTokenChanged = (callback) => this.auth.onIdTokenChanged(callback)
 
   onListsChange = (callback) => this.database.ref('lists').on('value', (snapshot) => callback(snapshot.val()))
 

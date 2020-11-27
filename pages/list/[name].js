@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useFirebase } from '~/components/Firebase'
+import Firebase, { useFirebase } from '~/components/Firebase'
 import Container from '~/components/Container'
 import Header from '~/components/Header'
 import Icon from '~/components/Icon'
@@ -17,6 +17,8 @@ import {
 import NewItemForm from '~/components/NewItemForm'
 import EditItemForm from '~/components/EditItemForm'
 import Cookies from 'js-cookie'
+import nookies from 'nookies'
+import firebaseAdmin from '~/utils/firebaseAdmin'
 
 const Options = styled.div`
   display: grid;
@@ -50,8 +52,8 @@ const Name = () => {
   const [reminderSent, setReminderSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const list = lists[name]
-  const listUserName = name && name.substring(2)
-  const currentUserName = user && user.displayName.substring(2)
+  const listUserName = name?.substring(2)
+  const currentUserName = user?.name?.substring(2) || user?.displayName?.substring(2)
   const isOwnList = currentUserName === listUserName
 
   useEffect(() => {
@@ -166,6 +168,26 @@ const Name = () => {
       {isOwnList && <NewItemForm name={name} />}
     </Container>
   )
+}
+
+export const getServerSideProps = async (ctx) => {
+  const firebase = new Firebase()
+  let lists = []
+  let user = null
+
+  try {
+    const cookies = nookies.get(ctx)
+    user = await firebaseAdmin.auth().verifyIdToken(cookies.token)
+  } catch {}
+
+  firebase.onListsChange((l) => (lists = l))
+
+  return {
+    props: {
+      user,
+      lists,
+    }
+  }
 }
 
 export default Name
