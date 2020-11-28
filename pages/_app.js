@@ -22,7 +22,9 @@ const MyApp = ({ Component, pageProps, ...initialProps }) => {
         nookies.destroy(undefined, 'token')
       } else {
         const token = await u.getIdToken()
-        nookies.set(undefined, 'token', token)
+        nookies.set(undefined, 'token', token, {
+          maxAge: 7 * 24 * 60 * 60,
+        })
       }
     }),
     [firebase],
