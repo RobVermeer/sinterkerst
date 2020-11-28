@@ -1,14 +1,16 @@
+import App from 'next/app'
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import Firebase, { FirebaseContext } from '~/components/Firebase'
 import Head from 'next/head'
 import { Global } from '@emotion/react'
 import globalStyles from '~/styles/global'
 import nookies from 'nookies'
+import absoluteUrl from 'next-absolute-url'
 
 const firebase = new Firebase()
 
-const MyApp = ({ Component, pageProps }) => {
-  const { user: initialUser = null, lists: initialLists = [] } = pageProps
+const MyApp = ({ Component, pageProps, ...initialProps }) => {
+  const { user: initialUser = null, lists: initialLists = [] } = initialProps
   const [user, setUser] = useState(initialUser)
   const [lists, setLists] = useState(initialLists)
   const data = useMemo(() => ({ user, lists, firebase }), [user, lists, firebase])
@@ -17,7 +19,7 @@ const MyApp = ({ Component, pageProps }) => {
       setUser(u)
 
       if (!u) {
-        nookies.set(undefined, 'token', '')
+        nookies.destroy(undefined, 'token')
       } else {
         const token = await u.getIdToken()
         nookies.set(undefined, 'token', token)
@@ -48,6 +50,30 @@ const MyApp = ({ Component, pageProps }) => {
       <Component {...pageProps} />
     </FirebaseContext.Provider>
   )
+}
+
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext)
+  const { ctx } = appContext
+  const { req } = ctx
+  const { origin } = absoluteUrl(req)
+  const { token } = nookies.get(ctx)
+  let user = null
+  let lists = []
+
+  if (req) {
+    const result = await fetch(`${origin}/api/validateToken`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const { user: u = null } = await result.json()
+    user = u
+    firebase.onListsChange((l) => (lists = l))
+  }
+
+  return { ...appProps, user, lists }
 }
 
 export default MyApp

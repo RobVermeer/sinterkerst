@@ -1,5 +1,5 @@
 import React from 'react'
-import Firebase, { useFirebase } from '~/components/Firebase'
+import { useFirebase } from '~/components/Firebase'
 import Link from 'next/link'
 import Header from '~/components/Header'
 import Container from '~/components/Container'
@@ -7,8 +7,6 @@ import PageTitle from '~/components/PageTitle'
 import Card from '~/components/Card'
 import Button from '~/components/Button'
 import Form from '~/components/Form'
-import nookies from 'nookies'
-import firebaseAdmin from '~/utils/firebaseAdmin'
 
 const Home = () => {
   const { user, lists } = useFirebase()
@@ -47,26 +45,6 @@ const Home = () => {
       )}
     </Container>
   )
-}
-
-export const getServerSideProps = async (ctx) => {
-  const firebase = new Firebase()
-  let lists = []
-  let user = null
-
-  try {
-    const cookies = nookies.get(ctx)
-    user = await firebaseAdmin.auth().verifyIdToken(cookies.token)
-  } catch {}
-
-  firebase.onListsChange((l) => (lists = l))
-
-  return {
-    props: {
-      user,
-      lists,
-    }
-  }
 }
 
 export default Home
